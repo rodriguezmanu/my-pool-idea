@@ -1,0 +1,30 @@
+@import 'variables';
+
+:host {
+  background-color: $green;
+  width: 200px;
+  padding: 50px 0;
+}
+
+.logo-container {
+  margin: 0 20px;
+
+  .title {
+    margin-top: 10px;
+    font-size: 16px;
+    color: $white;
+  }
+
+  .circle {
+    border-radius: 50%;
+    background-color: $white;
+    width: 64px;
+    height: 64px;
+
+    i {
+      font-size: 50px;
+      color: $green;
+      margin: 5px;
+    }
+  }
+}

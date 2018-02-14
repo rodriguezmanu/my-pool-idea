@@ -1,0 +1,33 @@
+<div class="form-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="50px">
+  <!-- Title -->
+  <div class="title">
+    {{ 'LOGIN.TITLE' | translate }}
+  </div>
+  <!-- Form -->
+  <form [formGroup]="loginForm" (ngSubmit)="login()" fxLayout="column">
+    <!-- Email -->
+    <mat-form-field>
+      <input matInput type="email" placeholder="Email" formControlName="email">
+    </mat-form-field>
+    <!-- Password -->
+    <mat-form-field>
+      <input matInput type="password" placeholder="Password" formControlName="password">
+    </mat-form-field>
+
+    <!-- Actions -->
+    <div class="actions-container">
+      <!-- Submit  -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        {{ 'LOGIN.LOGIN' | translate }}
+      </button>
+
+      <!-- Registration link -->
+      <span>
+        {{ 'LOGIN.DONTHAVEACCOUNT' | translate}}
+        <a routerLink="/registration">
+          {{ 'LOGIN.CREATEACCOUNT' | translate}}
+        </a>
+      </span>
+    </div>
+  </form>
+</div>

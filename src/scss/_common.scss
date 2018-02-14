@@ -1,0 +1,47 @@
+@import 'variables';
+
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  color: $green;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.mat-raised-button {
+  width: 151px;
+  height: 40px;
+
+  &.mat-primary {
+    background-color: $green;
+  }
+}
+
+.form-container {
+  height: 100%;
+
+  .title {
+    font-size: 40px;
+    color: $blue;
+  }
+
+  form {
+    min-width: 485px;
+  }
+
+  span {
+    color: $blue;
+    font-size: 16px;
+  }
+}

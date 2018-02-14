@@ -1,0 +1,19 @@
+{
+  "SIDEBAR": {
+    "TITLE": "The Idea Pool"
+  },
+  "LOGIN": {
+    "TITLE": "Log In",
+    "LOGIN": "LOG IN",
+    "DONTHAVEACCOUNT": "Don’t have an account?",
+    "CREATEACCOUNT": "Create an account"
+  },
+  "REGISTRATION": {
+    "TITLE": "Sign Up",
+    "SIGNUP": "SIGN UP",
+    "HAVEACCOUNT": "Already have an acount? ",
+    "LOGIN": "Log in"
+  }
+}
+
+
