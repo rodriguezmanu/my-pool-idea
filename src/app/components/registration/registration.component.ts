@@ -5,7 +5,10 @@ import {
   Validators,
   FormGroupDirective
 } from '@angular/forms';
-import { EMAIL_VALIDATOR_REGEX } from './../../app.constant';
+import {
+  EMAIL_VALIDATOR_REGEX,
+  PASSWORD_VALIDATION_REGEX
+} from './../../app.constant';
 
 @Component({
   selector: 'app-registration',
@@ -27,7 +30,8 @@ export class RegistrationComponent implements OnInit {
       password: [
         '',
         Validators.compose([
-          Validators.required
+          Validators.required,
+          Validators.pattern(PASSWORD_VALIDATION_REGEX)
         ])
       ],
       name: [

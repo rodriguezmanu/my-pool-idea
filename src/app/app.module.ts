@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { IdeasComponent } from './components/ideas/ideas.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -21,7 +22,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, SidebarComponent, LoginComponent, RegistrationComponent],
+  declarations: [
+    AppComponent,
+    SidebarComponent,
+    LoginComponent,
+    RegistrationComponent,
+    IdeasComponent
+  ],
   imports: [
     BrowserModule,
     AppMaterialModule,

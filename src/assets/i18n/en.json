@@ -13,6 +13,10 @@
     "SIGNUP": "SIGN UP",
     "HAVEACCOUNT": "Already have an acount? ",
     "LOGIN": "Log in"
+  },
+  "IDEAS": {
+    "TITLE": "My Ideas",
+    "GOTIDEAS": "Got Ideas ?"
   }
 }
 

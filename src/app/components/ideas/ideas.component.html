@@ -1,0 +1,51 @@
+<div class="ideas-container">
+  <!-- Header -->
+  <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+    <!-- Title -->
+    <div class="title">
+      {{ 'IDEAS.TITLE' | translate}}
+    </div>
+    <!-- New idea icon -->
+    <div class="new-idea">
+      <i class="material-icons">add_circle</i>
+    </div>
+  </div>
+  <!-- Separator -->
+  <hr>
+  <div class="idea-content">
+    <!-- NO ideas -->
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <!-- Idea icon -->
+      <i class="material-icons">lightbulb_outline</i>
+      <div class="title">
+        {{ 'IDEAS.GOTIDEAS' | translate }}
+      </div>
+    </div>
+
+    <!-- Ideas -->
+    <div>
+      <form fxLayout="row" fxLayoutGap="50px">
+        <!-- Impact -->
+        <mat-select [(ngModel)]="impact" name="impact">
+          <mat-option *ngFor="let number of numbers" [value]="number">
+              {{number}}
+          </mat-option>
+        </mat-select>
+
+        <!-- Ease -->
+        <mat-select [(ngModel)]="ease" name="ease">
+          <mat-option *ngFor="let number of numbers" [value]="number">
+              {{number}}
+          </mat-option>
+        </mat-select>
+        <!-- Ease -->
+        <mat-select [(ngModel)]="confidence" name="confidence">
+          <mat-option *ngFor="let number of numbers" [value]="number">
+            {{number}}
+          </mat-option>
+        </mat-select>
+
+      </form>
+    </div>
+  </div>
+</div>
