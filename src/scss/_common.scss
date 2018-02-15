@@ -25,6 +25,7 @@ a {
 
   &.mat-primary {
     background-color: $green;
+    color: $white;
   }
 }
 
@@ -40,7 +41,7 @@ a {
     min-width: 485px;
   }
 
-  span {
+  .link {
     color: $blue;
     font-size: 16px;
   }

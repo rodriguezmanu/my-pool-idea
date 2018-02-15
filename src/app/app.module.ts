@@ -1,3 +1,4 @@
+import { UsersService } from './services/users.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +8,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { Http, RequestOptions } from '@angular/http';
 
 import { AppRoutingModule } from './app.routing';
 
@@ -19,6 +22,18 @@ import { IdeasComponent } from './components/ideas/ideas.component';
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
+}
+
+export function getAuthHttp(http: Http, options: RequestOptions) {
+  return new AuthHttp(
+    new AuthConfig({
+      noJwtError: true,
+      globalHeaders: [{ Accept: 'application/json' }],
+      tokenGetter: () => localStorage.getItem('id_token')
+    }),
+    http,
+    options
+  );
 }
 
 @NgModule({
@@ -45,7 +60,14 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: AuthHttp,
+      useFactory: getAuthHttp,
+      deps: [Http, RequestOptions]
+    },
+    UsersService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
