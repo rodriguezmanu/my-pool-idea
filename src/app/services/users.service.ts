@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
@@ -6,32 +6,84 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
 import { API } from './../app.constant';
+import { JwtHelper } from 'angular2-jwt';
+import { User } from '../models/User';
+import { AuthHttp } from 'angular2-jwt';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UsersService {
-  constructor(private http: HttpClient) {}
+  @Output() currentUserChanged = new EventEmitter(true);
+
+  jwtHelper: JwtHelper = new JwtHelper();
+  currentUser: User.IUser;
+
+  constructor(private http: HttpClient, private authHttp: AuthHttp) {}
 
   /**
    * Login and set localStorage token
    *
-   * @param {any} user
+   * @param {User.IUser} user
    * @memberof UsersService
    */
-  login(user): Observable<any> {
-
+  login(user: User.IUser): Observable<void> {
     // @todo add interceptor
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      }
-    )};
-
+      })
+    };
     return this.http
-      .post(API.URL + API.LOGIN, user, httpOptions)
+      .post<User.ILogin>(environment.api + API.LOGIN, user, httpOptions)
       .map(data => {
         if (data) {
-          localStorage.setItem('token', JSON.stringify(data));
+          this.currentUser = this.jwtHelper.decodeToken(data.jwt);
+
+          // set token in localStorage
+          localStorage.setItem('token', data.jwt);
+          localStorage.setItem('refresh_token', data.refresh_token);
+
+          // emit to current user side bar
+          this.currentUserChanged.emit(this.getMe());
         }
       });
+  }
+
+  /**
+   * Logout user
+   *
+   * @returns {Observable<void>}
+   * @memberof UsersService
+   */
+  logout(): Observable<void> {
+    const body: object = {
+      refresh_token: localStorage.refresh_token
+    };
+
+    return this.authHttp
+      .delete(environment.api + API.LOGIN, { body })
+      .map(data => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+      });
+  }
+
+  /**
+   * Get Current User from API
+   *
+   * @param {string} token
+   * @returns {Observable<Object>}
+   * @memberof UsersService
+   */
+  getMe(): Observable<Object> {
+    return this.authHttp
+      .get(environment.api + API.ME)
+      .map(response => response.json());
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.token;
+
+    return !token ? false : !this.jwtHelper.isTokenExpired(token);
   }
 }

@@ -7,9 +7,9 @@ import { AppMaterialModule } from './modules/app-material/app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
-import { Http, RequestOptions } from '@angular/http';
+import { Http, RequestOptions, HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app.routing';
 
@@ -18,6 +18,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { IdeasComponent } from './components/ideas/ideas.component';
+import { AuthGuard } from './guards/auth.guard';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -25,15 +26,17 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 export function getAuthHttp(http: Http, options: RequestOptions) {
-  return new AuthHttp(
-    new AuthConfig({
+  return new AuthHttp(new AuthConfig({
+      globalHeaders: [
+        {
+          Accept: 'application/json'
+        }
+      ],
+      noTokenScheme: true,
       noJwtError: true,
-      globalHeaders: [{ Accept: 'application/json' }],
-      tokenGetter: () => localStorage.getItem('id_token')
-    }),
-    http,
-    options
-  );
+      headerName: 'X-Access-Token',
+      tokenName: 'token',
+    }), http, options);
 }
 
 @NgModule({
@@ -46,6 +49,7 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     AppMaterialModule,
     FlexLayoutModule,
     FormsModule,
@@ -66,7 +70,8 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
       useFactory: getAuthHttp,
       deps: [Http, RequestOptions]
     },
-    UsersService
+    UsersService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -8,14 +8,18 @@ import {
 import { EMAIL_VALIDATOR_REGEX, PASSWORD_VALIDATION_REGEX } from './../../app.constant';
 import { UsersService } from './../../services/users.service';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/takeUntil';
+import { Subject } from 'rxjs/rx';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
+  protected ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,13 +57,20 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.get('password').value
     };
 
-    this.usersService.login(user)
+    this.usersService
+      .login(user)
+      .takeUntil(this.ngUnsubscribe)
       .subscribe(data => {
-        this.router.navigate(['/ideas']);
-      }, error => {
-        console.log('Failed to login');
-      }, () => {
-        console.log('finally');
-      });
+          this.router.navigate(['/ideas']);
+        }, error => {
+          console.log('Failed to login');
+        }, () => {
+          console.log('finally');
+        });
+  }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

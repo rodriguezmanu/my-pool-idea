@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-ideas',
   templateUrl: './ideas.component.html',
@@ -11,7 +12,6 @@ export class IdeasComponent implements OnInit {
   ease = 10;
   confidence = 10;
   average: number;
-
 
   constructor() {
     // generate numbers array
