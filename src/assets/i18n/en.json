@@ -1,6 +1,7 @@
 {
   "SIDEBAR": {
-    "TITLE": "The Idea Pool"
+    "TITLE": "The Idea Pool",
+    "LOGOUT": "Log out"
   },
   "LOGIN": {
     "TITLE": "Log In",

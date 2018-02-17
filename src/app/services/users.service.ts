@@ -44,7 +44,7 @@ export class UsersService {
           localStorage.setItem('refresh_token', data.refresh_token);
 
           // emit to current user side bar
-          this.currentUserChanged.emit(this.getMe());
+          this.currentUserChanged.emit();
         }
       });
   }
@@ -63,9 +63,18 @@ export class UsersService {
     return this.authHttp
       .delete(environment.api + API.LOGIN, { body })
       .map(data => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh_token');
+        this.removeTokens();
       });
+  }
+
+  /**
+   * Remove tokens
+   *
+   * @memberof UsersService
+   */
+  removeTokens(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
   }
 
   /**
@@ -83,7 +92,18 @@ export class UsersService {
 
   isLoggedIn(): boolean {
     const token = localStorage.token;
+    let isExpired: boolean;
 
-    return !token ? false : !this.jwtHelper.isTokenExpired(token);
+    if (!token) {
+      return false;
+    }
+
+    try {
+      isExpired = !this.jwtHelper.isTokenExpired(token);
+    } catch (error) {
+      isExpired = false;
+      this.removeTokens();
+    }
+    return isExpired;
   }
 }

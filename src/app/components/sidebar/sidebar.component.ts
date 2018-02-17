@@ -9,23 +9,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-
   currentUser: User.IMe;
-  isLoggedIn: boolean;
 
   constructor(private usersService: UsersService, private router: Router) {
     // emit after login
-    this.usersService.currentUserChanged.subscribe(user => {
-      user.subscribe(u => {
-        this.currentUser = u;
+    this.usersService.currentUserChanged
+      .flatMap(() => this.usersService.getMe())
+      .subscribe((user: User.IMe) => {
+        this.currentUser = user;
       });
-    });
   }
 
   ngOnInit() {
-    this.isLoggedIn = this.usersService.isLoggedIn();
-
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn()) {
       this.usersService.getMe()
         .subscribe((data: User.IMe) => {
           this.currentUser = data;
@@ -39,9 +35,18 @@ export class SidebarComponent implements OnInit {
    * @memberof SidebarComponent
    */
   logout(): void {
-    this.usersService.logout()
-      .subscribe(data => {
-        this.router.navigate(['/login']);
-      });
+    this.usersService.logout().subscribe(data => {
+      this.router.navigate(['/login']);
+    });
+  }
+
+  /**
+   * Get if is user is login or not
+   *
+   * @returns Boolean
+   * @memberof SidebarComponent
+   */
+  isLoggedIn(): boolean {
+    return this.usersService.isLoggedIn();
   }
 }

@@ -28,3 +28,29 @@
     }
   }
 }
+
+.profile-container {
+  hr {
+    width: 100%;
+    margin: 41px 0 37px;
+  }
+
+  img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  }
+
+  .name {
+    margin-top: 6px;
+    font-size: 20px;
+    color: $white;
+  }
+
+  .logout {
+    margin-top: 9px;
+    font-size: 16px;
+    color: $blue;
+    cursor: pointer;
+  }
+}

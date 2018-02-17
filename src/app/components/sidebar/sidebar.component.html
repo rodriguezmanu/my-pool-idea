@@ -9,11 +9,17 @@
     <div class="title">
       {{ 'SIDEBAR.TITLE' | translate }}
     </div>
-
-    <div *ngIf="isLoggedIn && currentUser">
-      <button (click)="logout()">Logout</button>
-      <pre>{{ currentUser.email }}</pre>
+    <!-- User Profile - LoggedIn Section -->
+    <div *ngIf="isLoggedIn() && currentUser" fxLayout="column" fxLayoutAlign="center center" class="profile-container">
+      <hr>
+      <!-- Gravatar image -->
+      <img alt="avatar" [src]="currentUser.avatar_url">
+      <!-- Name -->
+      <div class="name">{{ currentUser.name }}</div>
+      <!-- Logout Action -->
+      <div class="logout" (click)="logout()">
+        {{ 'SIDEBAR.LOGOUT' | translate }}
+      </div>
     </div>
-
   </div>
 </div>

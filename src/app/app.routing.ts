@@ -7,14 +7,24 @@ import { LoginComponent } from './components/login/login.component';
 import { IdeasComponent } from './components/ideas/ideas.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'registration', component: RegistrationComponent },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'registration',
+    component: RegistrationComponent
+  },
   {
     path: 'ideas',
     component: IdeasComponent,
     canActivate: [AuthGuard]
   },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' }
+  {
+    path: '**',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
