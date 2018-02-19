@@ -4,7 +4,17 @@ export const EMAIL_VALIDATOR_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,
 export const PASSWORD_VALIDATION_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 export const API = {
-  LOGIN: '/access-tokens',
-  SIGNUP: '/users',
-  ME: '/me'
+  USERS: {
+    LOGIN: '/access-tokens',
+    LOGOUT: '/access-tokens',
+    SIGNUP: '/users',
+    ME: '/me',
+    REFRESH: '/access-tokens/refresh',
+  },
+  IDEAS: {
+    CREATE: '/ideas',
+    DELETE: '/ideas/',
+    UPDATE: '/ideas/',
+    GET: '/ideas'
+  }
 };

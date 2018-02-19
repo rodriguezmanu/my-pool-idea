@@ -19,6 +19,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { IdeasComponent } from './components/ideas/ideas.component';
 import { AuthGuard } from './guards/auth.guard';
+import { IdeasService } from './services/ideas.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -71,6 +72,7 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
       deps: [Http, RequestOptions]
     },
     UsersService,
+    IdeasService,
     AuthGuard
   ],
   bootstrap: [AppComponent]

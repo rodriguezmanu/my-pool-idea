@@ -6,15 +6,16 @@
       {{ 'IDEAS.TITLE' | translate}}
     </div>
     <!-- New idea icon -->
-    <div class="new-idea">
+    <div class="new-idea" (click)="addNewIdea()">
       <i class="material-icons">add_circle</i>
     </div>
   </div>
   <!-- Separator -->
   <hr>
   <div class="idea-content">
+
     <!-- NO ideas -->
-    <div fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="ideas.length === 0 && !newIdeaView" fxLayout="column" fxLayoutAlign="center center">
       <!-- Idea icon -->
       <i class="material-icons">lightbulb_outline</i>
       <div class="title">
@@ -22,9 +23,18 @@
       </div>
     </div>
 
-    <!-- Ideas -->
-    <div>
-      <form fxLayout="row" fxLayoutGap="50px">
+    <!-- List Ideas -->
+    <div *ngFor="let idea of ideas">
+      <pre>{{ idea }}</pre>
+    </div>
+
+    <!-- New Idea -->
+    <div *ngIf="newIdeaView" class="new-idea-container">
+      <form fxLayout="row" fxLayoutGap="40px">
+        <!-- Value -->
+        <mat-form-field>
+          <input matInput>
+        </mat-form-field>
         <!-- Impact -->
         <mat-select [(ngModel)]="impact" name="impact">
           <mat-option *ngFor="let number of numbers" [value]="number">
@@ -44,6 +54,12 @@
             {{number}}
           </mat-option>
         </mat-select>
+        <!-- Average -->
+        <div class="average"></div>
+        <!-- Submit -->
+        <i class="material-icons done">done</i>
+        <!-- Delete -->
+        <i class="material-icons clear">clear</i>
       </form>
     </div>
   </div>

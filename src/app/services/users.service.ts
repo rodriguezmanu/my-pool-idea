@@ -2,7 +2,6 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
 import { API } from './../app.constant';
@@ -34,7 +33,7 @@ export class UsersService {
       })
     };
     return this.http
-      .post<User.ILogin>(environment.api + API.LOGIN, user, httpOptions)
+      .post<User.ILogin>(environment.api + API.USERS.LOGIN, user, httpOptions)
       .map(data => {
         if (data) {
           this.currentUser = this.jwtHelper.decodeToken(data.jwt);
@@ -61,7 +60,7 @@ export class UsersService {
     };
 
     return this.authHttp
-      .delete(environment.api + API.LOGIN, { body })
+      .delete(environment.api + API.USERS.LOGIN, { body })
       .map(data => {
         this.removeTokens();
       });
@@ -86,12 +85,18 @@ export class UsersService {
    */
   getMe(): Observable<Object> {
     return this.authHttp
-      .get(environment.api + API.ME)
+      .get(environment.api + API.USERS.ME)
       .map(response => response.json());
   }
 
+  /**
+   * Get is user is logged in or not checking for token expired and if token exist, also refresh token if its needed
+   *
+   * @returns {boolean}
+   * @memberof UsersService
+   */
   isLoggedIn(): boolean {
-    const token = localStorage.token;
+    const { token } = localStorage;
     let isExpired: boolean;
 
     if (!token) {
@@ -100,10 +105,42 @@ export class UsersService {
 
     try {
       isExpired = !this.jwtHelper.isTokenExpired(token);
+
+      // if (isExpired) {
+      //   this.refreshToken()
+      //   .subscribe();
+      // }
     } catch (error) {
       isExpired = false;
       this.removeTokens();
+      return isExpired;
     }
     return isExpired;
+  }
+
+  /**
+   * Refresh token and set new one on localStorage
+   *
+   * @returns
+   * @memberof UsersService
+   */
+  private refreshToken() {
+    const body = {
+      refresh_token: localStorage.refresh_token
+    };
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http
+      .post(environment.api + API.USERS.REFRESH, body, httpOptions)
+      .map((data: any) => {
+          // set token in localStorage
+          localStorage.removeItem('token');
+          localStorage.setItem('token', data.jwt);
+      });
   }
 }
