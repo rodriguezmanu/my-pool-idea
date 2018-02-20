@@ -13,4 +13,8 @@ export namespace User {
     email: string;
     avatar_url: string;
   }
+
+  export interface ISignUp extends IUser {
+    name: string;
+  }
 }

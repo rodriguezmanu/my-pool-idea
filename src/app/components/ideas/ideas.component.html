@@ -17,7 +17,7 @@
   <!-- Ideas Content -->
   <div class="idea-content">
     <!-- NO ideas -->
-    <div *ngIf="false" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="dataSource && dataSource.data.length === 0" fxLayout="column" fxLayoutAlign="center center">
       <!-- Idea icon -->
       <i class="material-icons">lightbulb_outline</i>
       <div class="title">
@@ -25,7 +25,8 @@
       </div>
     </div>
 
-    <div class="new-idea-container">
+    <!-- With Ideas  -->
+    <div class="new-idea-container" *ngIf="dataSource && dataSource.data.length !== 0">
       <mat-table #table [dataSource]="dataSource">
         <!-- Content Column -->
         <ng-container matColumnDef="content">

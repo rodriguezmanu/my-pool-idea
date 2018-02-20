@@ -26,7 +26,6 @@ export class UsersService {
    * @memberof UsersService
    */
   login(user: User.IUser): Observable<void> {
-    // @todo add interceptor
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -138,9 +137,24 @@ export class UsersService {
     return this.http
       .post(environment.api + API.USERS.REFRESH, body, httpOptions)
       .map((data: any) => {
-          // set token in localStorage
-          localStorage.removeItem('token');
-          localStorage.setItem('token', data.jwt);
+        // set token in localStorage
+        localStorage.removeItem('token');
+        localStorage.setItem('token', data.jwt);
+      });
+  }
+
+  registration(user: User.ISignUp) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http
+      .post<User.ILogin>(environment.api + API.USERS.SIGNUP, user, httpOptions)
+      .map(data => {
+        localStorage.setItem('token', data.jwt);
+        localStorage.setItem('refresh_token', data.refresh_token);
       });
   }
 }

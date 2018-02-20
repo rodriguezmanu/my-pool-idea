@@ -2,7 +2,10 @@ import { ToastsService } from './../../services/toastr.service';
 import { Idea } from './../../models/Idea';
 import { IdeasService } from './../../services/ideas.service';
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatDialog } from '@angular/material';
+import {
+  MatTableDataSource,
+  MatDialog
+} from '@angular/material';
 import { DeleteDialogComponent } from '../../dialogs/deleteIdea/delete.dialog.component';
 
 @Component({
@@ -15,6 +18,7 @@ export class IdeasComponent implements OnInit {
   ideas: Idea.Get[] = [];
   newIdeaView = false;
   dataSource;
+  temp = [];
   displayedColumns = [
     'content',
     'impact',
@@ -30,12 +34,34 @@ export class IdeasComponent implements OnInit {
     private dialog: MatDialog,
     private toastsService: ToastsService
   ) {
-    // generate numbers array
+    // generate numbers ease, impact and confidence selects
     this.numbers = new Array(10).fill(0).map((x, i) => i + 1);
   }
 
   ngOnInit() {
-    this.getIdeas();
+    this.getAllIdeas();
+  }
+
+  /**
+   * Get all pages ideas
+   *
+   * @memberof IdeasComponent
+   */
+  getAllIdeas() {
+    this.ideasService.getAllIdeas().subscribe(
+      response => {
+        if (response.data) {
+          this.temp.push.apply(this.temp, response.data);
+        }
+      },
+      () => {
+        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+      },
+      () => {
+        const data = this.setEditVisibility(this.temp);
+        this.dataSource = new MatTableDataSource(data);
+      }
+    );
   }
 
   /**
@@ -45,14 +71,16 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   getIdeas(page = 1): void {
-    this.ideasService.getIdeas(page)
-      .subscribe((data: Idea.Get[]) => {
+    this.ideasService.getIdeas(page).subscribe(
+      (data: Idea.Get[]) => {
         data = this.setEditVisibility(data);
 
         this.dataSource = new MatTableDataSource(data);
-        }, () => {
-          this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-        });
+      },
+      () => {
+        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+      }
+    );
   }
 
   /**
@@ -81,14 +109,16 @@ export class IdeasComponent implements OnInit {
     if (!idea.isEdit) {
       this.updateIdea(idea);
     } else {
-      this.ideasService.createNewIdea(idea)
-        .subscribe(data => {
+      this.ideasService.createNewIdea(idea).subscribe(
+        data => {
           // this.changeStatus(idea, false);
           this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
-          this.getIdeas();
-        }, () => {
+          this.getAllIdeas();
+        },
+        () => {
           this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-        });
+        }
+      );
     }
   }
 
@@ -101,17 +131,18 @@ export class IdeasComponent implements OnInit {
   deleteIdea(id: string): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent);
 
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'confirm') {
-          this.ideasService.deleteIdea(id)
-            .subscribe(data => {
-              this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.DELETED');
-              this.clearIdea(id, {});
-            }, () => {
-              this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-            });
-        }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.ideasService.deleteIdea(id).subscribe(
+          data => {
+            this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.DELETED');
+            this.clearIdea(id, {});
+          },
+          () => {
+            this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+          }
+        );
+      }
     });
   }
 
@@ -122,14 +153,16 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   updateIdea(idea: Idea.Get): void {
-    this.ideasService.updateIdea(idea)
-      .subscribe(data => {
+    this.ideasService.updateIdea(idea).subscribe(
+      data => {
         this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.UPDATED');
         // this.changeStatus(idea, false);
         this.getIdeas();
-      }, () => {
+      },
+      () => {
         this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-      });
+      }
+    );
   }
 
   /**

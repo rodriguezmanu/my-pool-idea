@@ -1,11 +1,11 @@
 import { Idea } from './../models/Idea';
 import { Injectable } from '@angular/core';
 import { AuthHttp } from 'angular2-jwt';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/expand';
 import { environment } from '../../environments/environment';
 import { API } from './../app.constant';
-
+import { Observable } from 'rxjs/rx';
 
 @Injectable()
 export class IdeasService {
@@ -34,7 +34,26 @@ export class IdeasService {
   getIdeas(page: number): Observable<Object> {
     return this.authHttp
       .get(environment.api + API.IDEAS.GET + `?page=${page}`)
-      .map(response => response.json());
+      .map(response => {
+        return {
+          page: page,
+          data: response.json()
+        };
+      });
+  }
+
+  /**
+   * Get All Ideas recursive
+   *
+   * @returns {Observable<Object>}
+   * @memberof IdeasService
+   */
+  getAllIdeas() {
+    return this.getIdeas(1).expand((res: any) => {
+      return res.data && res.data.length === 10
+        ? this.getIdeas(res.page + 1)
+        : Observable.empty();
+    });
   }
 
   /**
