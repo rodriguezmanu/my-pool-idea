@@ -17,7 +17,13 @@
   },
   "IDEAS": {
     "TITLE": "My Ideas",
-    "GOTIDEAS": "Got Ideas ?"
+    "GOTIDEAS": "Got Ideas ?",
+    "TABLE": {
+      "IMPACT": "Impact",
+      "EASE": "Ease",
+      "CONFIDENCE": "Confidence",
+      "AVG": "Avg."
+    }
   }
 }
 

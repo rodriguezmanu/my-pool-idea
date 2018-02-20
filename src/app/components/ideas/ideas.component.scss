@@ -47,14 +47,14 @@
     }
 
     .new-idea-container {
-      i {
-        font-size: 30px;
-        margin-right: 20px !important;
-        cursor: pointer;
-      }
-
       .done {
         color: $green;
+      }
+
+      .mat-header-row,
+      .mat-row {
+        border-bottom-style: none;
+        border-bottom-width: 0;
       }
     }
   }

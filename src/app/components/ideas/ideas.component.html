@@ -10,12 +10,14 @@
       <i class="material-icons">add_circle</i>
     </div>
   </div>
+
   <!-- Separator -->
   <hr>
-  <div class="idea-content">
 
+  <!-- Ideas Content -->
+  <div class="idea-content">
     <!-- NO ideas -->
-    <div *ngIf="ideas.length === 0 && !newIdeaView" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="false" fxLayout="column" fxLayoutAlign="center center">
       <!-- Idea icon -->
       <i class="material-icons">lightbulb_outline</i>
       <div class="title">
@@ -23,44 +25,135 @@
       </div>
     </div>
 
-    <!-- List Ideas -->
-    <div *ngFor="let idea of ideas">
-      <pre>{{ idea }}</pre>
+    <div class="new-idea-container">
+      <mat-table #table [dataSource]="dataSource">
+        <!-- Content Column -->
+        <ng-container matColumnDef="content">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+            <!-- Edit/New mode -->
+          <mat-cell *matCellDef="let element;let i=index;">
+            <mat-form-field *ngIf="element.isEdit">
+              <input matInput type="text" [(ngModel)]="element.content">
+            </mat-form-field>
+
+            <div *ngIf="!element.isEdit">
+              {{ element.content }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Impact Column -->
+        <ng-container matColumnDef="impact">
+          <mat-header-cell *matHeaderCellDef>
+            {{ 'IDEAS.TABLE.IMPACT' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element;let i=index;">
+            <mat-select  *ngIf="element.isEdit" [(ngModel)]="element.impact" name="impact">
+              <mat-option *ngFor="let number of numbers" [value]="number">
+                {{ number }}
+              </mat-option>
+            </mat-select>
+
+            <!-- Read only mode -->
+            <div *ngIf="!element.isEdit">
+              {{ element.impact }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Ease Column -->
+        <ng-container matColumnDef="ease">
+          <mat-header-cell *matHeaderCellDef>
+            {{ 'IDEAS.TABLE.EASE' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element;let i=index;">
+            <!-- Edit/New mode -->
+            <mat-select *ngIf="element.isEdit" [(ngModel)]="element.ease" name="ease">
+              <mat-option *ngFor="let number of numbers" [value]="number">
+                {{ number }}
+              </mat-option>
+            </mat-select>
+
+            <!-- Read only mode -->
+            <div *ngIf="!element.isEdit">
+              {{ element.ease }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Confidence Column -->
+        <ng-container matColumnDef="confidence">
+          <mat-header-cell *matHeaderCellDef>
+            {{ 'IDEAS.TABLE.CONFIDENCE' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element;let i=index;">
+            <!-- Edit/New mode -->
+            <mat-select *ngIf="element.isEdit" [(ngModel)]="element.confidence" name="confidence">
+              <mat-option *ngFor="let number of numbers" [value]="number">
+                {{ number }}
+              </mat-option>
+            </mat-select>
+
+            <!-- Read only mode -->
+            <div *ngIf="!element.isEdit">
+              {{ element.confidence }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Avg Column -->
+        <ng-container matColumnDef="avg">
+          <mat-header-cell *matHeaderCellDef>
+            {{ 'IDEAS.TABLE.AVG' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element;let i=index;">
+            {{ element.average_score.toFixed(2) }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- Done Column - Edit Column -->
+        <ng-container matColumnDef="done">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i=index;">
+            <!-- Done -->
+            <button mat-icon-button [disabled]="row.content.length > 250 || row.content.length == 0" (click)="createNewIdea(row)" mat-icon-button *ngIf="row.isEdit">
+              <mat-icon class="done">done</mat-icon>
+            </button>
+
+            <!-- Edit -->
+            <button (click)="changeStatus(row, true)" mat-icon-button *ngIf="!row.isEdit">
+              <mat-icon class="done">create</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Clear Column  - Delete Column-->
+        <ng-container matColumnDef="clear">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i=index;">
+            <!-- Clear -->
+            <button mat-icon-button (click)="clearIdea(i)" *ngIf="row.isEdit">
+              <mat-icon class="clear">clear</mat-icon>
+            </button>
+
+            <!-- Delete -->
+            <button mat-icon-button *ngIf="!row.isEdit">
+              <mat-icon (click)="deleteIdea()" class="done">delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <!-- Paginator -->
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+      </mat-paginator>
     </div>
 
-    <!-- New Idea -->
-    <div *ngIf="newIdeaView" class="new-idea-container">
-      <form fxLayout="row" fxLayoutGap="40px">
-        <!-- Value -->
-        <mat-form-field>
-          <input matInput>
-        </mat-form-field>
-        <!-- Impact -->
-        <mat-select [(ngModel)]="impact" name="impact">
-          <mat-option *ngFor="let number of numbers" [value]="number">
-              {{number}}
-          </mat-option>
-        </mat-select>
-
-        <!-- Ease -->
-        <mat-select [(ngModel)]="ease" name="ease">
-          <mat-option *ngFor="let number of numbers" [value]="number">
-              {{number}}
-          </mat-option>
-        </mat-select>
-        <!-- Ease -->
-        <mat-select [(ngModel)]="confidence" name="confidence">
-          <mat-option *ngFor="let number of numbers" [value]="number">
-            {{number}}
-          </mat-option>
-        </mat-select>
-        <!-- Average -->
-        <div class="average"></div>
-        <!-- Submit -->
-        <i class="material-icons done">done</i>
-        <!-- Delete -->
-        <i class="material-icons clear">clear</i>
-      </form>
-    </div>
   </div>
 </div>

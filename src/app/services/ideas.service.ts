@@ -1,4 +1,4 @@
-import { Idea, Get } from './../models/Idea';
+import { Idea } from './../models/Idea';
 import { Injectable } from '@angular/core';
 import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ export class IdeasService {
    */
   createNewIdea(body: Idea.Body): Observable<Object> {
     return this.authHttp
-      .post(environment.api + API.IDEAS.CREATE, { body })
+      .post(environment.api + API.IDEAS.CREATE, body)
       .map(response => response.json());
   }
 
@@ -33,7 +33,7 @@ export class IdeasService {
    */
   getIdeas(page: number): Observable<Object> {
     return this.authHttp
-      .get(environment.api + API.IDEAS.GET)
+      .get(environment.api + API.IDEAS.GET + `?page=${page}`)
       .map(response => response.json());
   }
 

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { CdkTableModule } from '@angular/cdk/table';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -51,7 +53,10 @@ import {
     MatListModule,
     MatCardModule,
     MatSliderModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    CdkTableModule,
+    MatPaginatorModule
   ],
   exports: [
     MatButtonModule,
@@ -65,7 +70,10 @@ import {
     MatListModule,
     MatCardModule,
     MatSliderModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    CdkTableModule,
+    MatPaginatorModule
   ],
   declarations: []
 })

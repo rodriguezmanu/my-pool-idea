@@ -4,6 +4,8 @@ export namespace Idea {
     impact: number;
     ease: number;
     confidence: number;
+    average_score?: number;
+    isEdit?: boolean;
   }
 
   export interface Get {
