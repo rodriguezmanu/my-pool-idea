@@ -1,0 +1,19 @@
+<div class="container" fxLayout="column" fxLayoutAlign="space-between center">
+  <!-- Title -->
+  <h3 mat-dialog-title>
+  {{ 'IDEAS.DIALOG.DELETE.TITLE' | translate }}
+  </h3>
+  <!-- Content -->
+  <div mat-dialog-content>
+  {{ 'IDEAS.DIALOG.DELETE.DESCRIPTION' | translate }}
+  </div>
+  <!-- Actions -->
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="1" (click)="confirmDelete()">
+      {{ 'IDEAS.DIALOG.DELETE.OK' | translate }}
+    </button>
+    <button mat-button (click)="onNoClick()" tabindex="-1">
+      {{ 'IDEAS.DIALOG.DELETE.CANCEL' | translate }}
+    </button>
+  </div>
+</div>

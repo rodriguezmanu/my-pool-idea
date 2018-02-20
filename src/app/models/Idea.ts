@@ -8,8 +8,7 @@ export namespace Idea {
     isEdit?: boolean;
   }
 
-  export interface Get {
-    Body;
+  export interface Get extends Body {
     id: string;
     average_score: number;
     created_at: number;

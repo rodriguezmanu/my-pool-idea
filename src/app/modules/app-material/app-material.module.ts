@@ -45,35 +45,27 @@ import {
     MatButtonModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatButtonToggleModule,
     MatDialogModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatCardModule,
-    MatSliderModule,
     MatSelectModule,
     MatTableModule,
-    CdkTableModule,
-    MatPaginatorModule
+    CdkTableModule
   ],
   exports: [
     MatButtonModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatButtonToggleModule,
     MatDialogModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatCardModule,
-    MatSliderModule,
     MatSelectModule,
     MatTableModule,
     CdkTableModule,
-    MatPaginatorModule
   ],
   declarations: []
 })

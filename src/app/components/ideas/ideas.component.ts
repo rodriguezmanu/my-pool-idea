@@ -1,7 +1,9 @@
+import { ToastsService } from './../../services/toastr.service';
 import { Idea } from './../../models/Idea';
 import { IdeasService } from './../../services/ideas.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator, MatDialog } from '@angular/material';
+import { DeleteDialogComponent } from '../../dialogs/deleteIdea/delete.dialog.component';
 
 @Component({
   selector: 'app-ideas',
@@ -11,13 +13,8 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 export class IdeasComponent implements OnInit {
   numbers: number[];
   ideas: Idea.Get[] = [];
-  pages: number;
-  impact = 10;
-  ease = 10;
-  confidence = 10;
-  average: number;
   newIdeaView = false;
-
+  dataSource;
   displayedColumns = [
     'content',
     'impact',
@@ -28,12 +25,11 @@ export class IdeasComponent implements OnInit {
     'clear'
   ];
 
-  dataSource;
-
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  constructor(private ideasService: IdeasService) {
+  constructor(
+    private ideasService: IdeasService,
+    private dialog: MatDialog,
+    private toastsService: ToastsService
+  ) {
     // generate numbers array
     this.numbers = new Array(10).fill(0).map((x, i) => i + 1);
   }
@@ -43,7 +39,7 @@ export class IdeasComponent implements OnInit {
   }
 
   /**
-   * Get Ideas
+   * Get Ideas from API
    *
    * @param {number} [page=1]
    * @memberof IdeasComponent
@@ -54,9 +50,9 @@ export class IdeasComponent implements OnInit {
         data = this.setEditVisibility(data);
 
         this.dataSource = new MatTableDataSource(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-    });
+        }, () => {
+          this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+        });
   }
 
   /**
@@ -66,7 +62,7 @@ export class IdeasComponent implements OnInit {
    * @returns {Idea.Body[]}
    * @memberof IdeasComponent
    */
-  setEditVisibility(ideas: Idea.Body[]): Idea.Body[] {
+  setEditVisibility(ideas: Idea.Get[]): Idea.Get[] {
     for (let index = 0; index < ideas.length; index++) {
       const element = ideas[index];
       element.isEdit = false;
@@ -81,15 +77,17 @@ export class IdeasComponent implements OnInit {
    * @param {Idea.Body} idea
    * @memberof IdeasComponent
    */
-  createNewIdea(idea: Idea.Body): void {
+  createNewIdea(idea: Idea.Get): void {
     if (!idea.isEdit) {
       this.updateIdea(idea);
     } else {
       this.ideasService.createNewIdea(idea)
         .subscribe(data => {
-          console.log(data);
           // this.changeStatus(idea, false);
+          this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
           this.getIdeas();
+        }, () => {
+          this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
         });
     }
   }
@@ -101,10 +99,20 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   deleteIdea(id: string): void {
-    this.ideasService.deleteIdea(id)
-      .subscribe(data => {
-        console.log(data);
-      });
+    const dialogRef = this.dialog.open(DeleteDialogComponent);
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === 'confirm') {
+          this.ideasService.deleteIdea(id)
+            .subscribe(data => {
+              this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.DELETED');
+              this.clearIdea(id, {});
+            }, () => {
+              this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+            });
+        }
+    });
   }
 
   /**
@@ -116,8 +124,11 @@ export class IdeasComponent implements OnInit {
   updateIdea(idea: Idea.Get): void {
     this.ideasService.updateIdea(idea)
       .subscribe(data => {
+        this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.UPDATED');
         // this.changeStatus(idea, false);
         this.getIdeas();
+      }, () => {
+        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
       });
   }
 
@@ -141,14 +152,21 @@ export class IdeasComponent implements OnInit {
   }
 
   /**
-   *  Clear no API idea
+   *  Clear no API idea or change the status if needed
    *
    * @param {string} index
+   * @param {string} id
    * @memberof IdeasComponent
    */
-  clearIdea(index: string): void {
-    this.dataSource.data.splice(index, 1);
-    this.dataSource.filter = '';
+  clearIdea(index: string, row): void {
+    // Change status, cancel update row
+    if (row.id) {
+      this.changeStatus(row, false);
+    } else {
+      // clear on the fly row
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.filter = '';
+    }
   }
 
   /**

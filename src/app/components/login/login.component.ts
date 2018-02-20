@@ -1,3 +1,4 @@
+import { ToastsService } from './../../services/toastr.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   FormGroup,
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private usersService: UsersService,
-    private router: Router
+    private router: Router,
+    private toastsService: ToastsService
   ) {
     this.loginForm = formBuilder.group({
       email: [
@@ -60,13 +62,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.usersService
       .login(user)
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(data => {
+      .subscribe(
+        data => {
           this.router.navigate(['/ideas']);
-        }, error => {
-          console.log('Failed to login');
-        }, () => {
-          console.log('finally');
-        });
+        },
+        error => {
+          this.toastsService.error('ALERTS.ERROR', 'ALERTS.BADLOGIN');
+        }
+      );
   }
 
   public ngOnDestroy() {

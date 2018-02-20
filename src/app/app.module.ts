@@ -1,3 +1,4 @@
+import { ToastsService } from './services/toastr.service';
 import { UsersService } from './services/users.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -10,6 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Http, RequestOptions, HttpModule } from '@angular/http';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 import { AppRoutingModule } from './app.routing';
 
@@ -20,6 +22,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { IdeasComponent } from './components/ideas/ideas.component';
 import { AuthGuard } from './guards/auth.guard';
 import { IdeasService } from './services/ideas.service';
+import { DeleteDialogComponent } from './dialogs/deleteIdea/delete.dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -46,7 +49,8 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
     SidebarComponent,
     LoginComponent,
     RegistrationComponent,
-    IdeasComponent
+    IdeasComponent,
+    DeleteDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,7 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    ToastModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -73,8 +78,10 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
     },
     UsersService,
     IdeasService,
+    ToastsService,
     AuthGuard
   ],
+  entryComponents: [DeleteDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -23,7 +23,24 @@
       "EASE": "Ease",
       "CONFIDENCE": "Confidence",
       "AVG": "Avg."
+    },
+    "DIALOG": {
+      "DELETE": {
+        "TITLE": "Are you sure?",
+        "DESCRIPTION": "This idea will be permanently deleted.",
+        "CANCEL": "CANCEL",
+        "OK": "OK"
+      }
     }
+  },
+  "ALERTS": {
+    "SUCCESS": "Success!",
+    "ERROR": "Error!",
+    "CREATED": "This Idea has been created!",
+    "UPDATED": "This Idea has been updated!",
+    "DELETED": "This Idea has been deleted!",
+    "ERRORMESSAGE": "Please try again!",
+    "BADLOGIN": "Email or password incorrect"
   }
 }
 
