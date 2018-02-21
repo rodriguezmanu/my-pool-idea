@@ -2,6 +2,7 @@ import { User } from './../../models/User';
 import { Component } from '@angular/core';
 import { UsersService } from './../../services/users.service';
 import { Router } from '@angular/router';
+import { ToastsService } from '../../services/toastr.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,12 +12,15 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
   currentUser: User.IMe;
 
-  constructor(private usersService: UsersService, private router: Router) {
+  constructor(
+    private usersService: UsersService,
+    private router: Router,
+    private toastsService: ToastsService
+  ) {
     // emit after login
-    this.usersService.currentUserChanged
-      .subscribe((user: User.IMe) => {
-        this.currentUser = user;
-      });
+    this.usersService.currentUserChanged.subscribe((user: User.IMe) => {
+      this.currentUser = user;
+    });
   }
 
   /**
@@ -25,10 +29,15 @@ export class SidebarComponent {
    * @memberof SidebarComponent
    */
   logout(): void {
-    this.usersService.logout()
-      .subscribe(data => {
+    this.usersService.logout().subscribe(
+      data => {
         this.router.navigate(['/login']);
-      });
+      },
+      () => {
+        this.toastsService.error('ALERTS.ERROR', 'ALERTS.BADLOGOUT');
+        this.usersService.removeTokens();
+      }
+    );
   }
 
   /**

@@ -41,7 +41,8 @@
     "DELETED": "This Idea has been deleted!",
     "ERRORMESSAGE": "Please try again!",
     "BADLOGIN": "Email or password incorrect",
-    "SIGNUP": "the account has been created"
+    "BADLOGOUT": "Something was wrong, login again" ,
+    "SIGNUP": "The account has been created"
   }
 }
 

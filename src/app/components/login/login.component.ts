@@ -65,8 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.router.navigate(['/ideas']);
-        },
-        error => {
+        },() => {
           this.toastsService.error('ALERTS.ERROR', 'ALERTS.BADLOGIN');
         }
       );

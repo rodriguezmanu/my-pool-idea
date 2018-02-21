@@ -28,6 +28,8 @@ export class UsersService {
         (user: User.IUser) => {
           this.currentUser = user;
 
+          this.router.navigate(['/ideas']);
+
           // emit to current user side bar
           this.currentUserChanged.emit(user);
         }
@@ -51,9 +53,7 @@ export class UsersService {
       .post<User.ILogin>(environment.api + API.USERS.LOGIN, user, httpOptions)
       .map((data: any) => {
         if (data) {
-          // set token in localStorage
-          localStorage.setItem('token', data.jwt);
-          localStorage.setItem('refresh_token', data.refresh_token);
+          this.setTokens(data.jwt, data.refresh_token);
 
           this.getMe().subscribe((response: User.IUser) => {
             this.currentUser = response;
@@ -62,6 +62,18 @@ export class UsersService {
           });
         }
       });
+  }
+
+  /**
+   * Set Tokens in localStorage
+   *
+   * @param {string} jwt
+   * @param {string} refresh
+   * @memberof UsersService
+   */
+  setTokens(jwt: string, refresh: string): void {
+    localStorage.setItem('token', jwt);
+    localStorage.setItem('refresh_token', refresh);
   }
 
   /**
@@ -125,46 +137,11 @@ export class UsersService {
 
     try {
       isExpired = !this.jwtHelper.isTokenExpired(token);
-      // if (isExpired) {
-      // this.refreshToken()
-      //   .subscribe(() => {
-      //     return true;
-      //   }, () => {
-      //     return false;
-      //   } );
-      // }
     } catch (error) {
       isExpired = false;
-      // this.removeTokens();
-      // return isExpired;
     }
+
     return isExpired;
-  }
-
-  /**
-   * Refresh token and set new one on localStorage
-   *
-   * @returns
-   * @memberof UsersService
-   */
-  private refreshToken() {
-    const body = {
-      refresh_token: localStorage.refresh_token
-    };
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-
-    return this.http
-      .post(environment.api + API.USERS.REFRESH, body, httpOptions)
-      .map((data: any) => {
-        // set token in localStorage
-        localStorage.removeItem('token');
-        localStorage.setItem('token', data.jwt);
-      });
   }
 
   /**
@@ -184,8 +161,7 @@ export class UsersService {
     return this.http
       .post<User.ILogin>(environment.api + API.USERS.SIGNUP, user, httpOptions)
       .map(data => {
-        localStorage.setItem('token', data.jwt);
-        localStorage.setItem('refresh_token', data.refresh_token);
+        this.setTokens(data.jwt, data.refresh_token);
       });
   }
 }
