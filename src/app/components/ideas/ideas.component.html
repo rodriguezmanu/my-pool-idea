@@ -1,4 +1,4 @@
-<div class="ideas-container">
+<div class="ideas-container" [ngBusy]="{busy: busy, minDuration: 1000}">
   <!-- Header -->
   <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
     <!-- Title -->
@@ -17,7 +17,7 @@
   <!-- Ideas Content -->
   <div class="idea-content">
     <!-- NO ideas -->
-    <div *ngIf="dataSource && dataSource.data.length === 0" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="dataSource && dataSource.data.length === 0" fxLayout="column" fxLayoutAlign="center center" class="no-ideas">
       <!-- Idea icon -->
       <i class="material-icons">lightbulb_outline</i>
       <div class="title">
@@ -124,9 +124,11 @@
             </button>
 
             <!-- Edit -->
-            <button (click)="changeStatus(row, true)" mat-icon-button *ngIf="!row.isEdit">
-              <mat-icon class="done">create</mat-icon>
-            </button>
+            <div [className]="hoveredIndex === row.id ? 'show-button' : 'hide-button'">
+              <button (click)="changeStatus(row, true)" mat-icon-button *ngIf="!row.isEdit">
+                <mat-icon class="done">create</mat-icon>
+              </button>
+            </div>
           </mat-cell>
         </ng-container>
 
@@ -141,14 +143,16 @@
             </button>
 
             <!-- Delete -->
-            <button mat-icon-button *ngIf="!row.isEdit">
-              <mat-icon (click)="deleteIdea(row.id)" class="done">delete</mat-icon>
-            </button>
+            <div [className]="hoveredIndex === row.id ? 'show-button' : 'hide-button'">
+              <button mat-icon-button *ngIf="!row.isEdit">
+                <mat-icon (click)="deleteIdea(row.id)" class="done">delete</mat-icon>
+              </button>
+            </div>
           </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (mouseover)="hoveredIndex=row.id"></mat-row>
       </mat-table>
     </div>
   </div>

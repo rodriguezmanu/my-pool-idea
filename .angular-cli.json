@@ -23,7 +23,8 @@
       "prefix": "app",
       "styles": [
         "styles.scss",
-        "../node_modules/ng2-toastr/ng2-toastr.css"
+        "../node_modules/ng2-toastr/ng2-toastr.css",
+        "../node_modules/angular2-busy/build/style/busy.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

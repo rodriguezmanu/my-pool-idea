@@ -1,7 +1,9 @@
 @import 'variables';
 
 .ideas-container {
-  margin: 40px;
+  margin: 40px 40px 0;
+  overflow-y: auto;
+  height: 100%;
 
   .header {
     margin-bottom: 30px;
@@ -19,7 +21,7 @@
   }
 
   .idea-content {
-    & > div {
+    .no-ideas {
       height: 500px;
     }
 
@@ -64,6 +66,11 @@
       .mat-header-cell {
         font-size: 14px;
         color: $blue;
+      }
+
+      .mat-table {
+        overflow: auto;
+        margin-bottom: 40px;
       }
     }
   }

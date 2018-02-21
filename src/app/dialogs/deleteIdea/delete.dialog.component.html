@@ -9,11 +9,13 @@
   </div>
   <!-- Actions -->
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="1" (click)="confirmDelete()">
-      {{ 'IDEAS.DIALOG.DELETE.OK' | translate }}
-    </button>
+    <!-- Cancel -->
     <button mat-button (click)="onNoClick()" tabindex="-1">
       {{ 'IDEAS.DIALOG.DELETE.CANCEL' | translate }}
+    </button>
+    <!-- Ok -->
+    <button mat-button class="ok-action" [mat-dialog-close]="1" (click)="confirmDelete()">
+      {{ 'IDEAS.DIALOG.DELETE.OK' | translate }}
     </button>
   </div>
 </div>

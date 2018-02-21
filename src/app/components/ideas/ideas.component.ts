@@ -7,6 +7,9 @@ import {
   MatDialog
 } from '@angular/material';
 import { DeleteDialogComponent } from '../../dialogs/deleteIdea/delete.dialog.component';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-ideas',
@@ -19,6 +22,7 @@ export class IdeasComponent implements OnInit {
   newIdeaView = false;
   dataSource;
   temp = [];
+  busy: Subscription;
   displayedColumns = [
     'content',
     'impact',
@@ -48,7 +52,7 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   getAllIdeas() {
-    this.ideasService.getAllIdeas().subscribe(
+    this.busy = this.ideasService.getAllIdeas().subscribe(
       response => {
         if (response.data) {
           this.temp.push.apply(this.temp, response.data);
@@ -59,7 +63,10 @@ export class IdeasComponent implements OnInit {
       },
       () => {
         const data = this.setEditVisibility(this.temp);
-        this.dataSource = new MatTableDataSource(data);
+        const sorted = _.sortBy(data, 'average_score');
+
+        this.dataSource = new MatTableDataSource(sorted);
+        this.temp = [];
       }
     );
   }
@@ -109,16 +116,16 @@ export class IdeasComponent implements OnInit {
     if (!idea.isEdit) {
       this.updateIdea(idea);
     } else {
-      this.ideasService.createNewIdea(idea).subscribe(
-        data => {
-          // this.changeStatus(idea, false);
-          this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
-          this.getAllIdeas();
-        },
-        () => {
-          this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-        }
-      );
+      this.ideasService.createNewIdea(idea)
+        .subscribe(
+          data => {
+            this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
+            this.getAllIdeas();
+          },
+          () => {
+            this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+          }
+        );
     }
   }
 

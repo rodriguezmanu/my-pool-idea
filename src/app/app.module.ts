@@ -12,7 +12,7 @@ import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Http, RequestOptions, HttpModule } from '@angular/http';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-
+import { BusyModule } from 'angular2-busy';
 import { AppRoutingModule } from './app.routing';
 
 import { AppComponent } from './app.component';
@@ -61,6 +61,7 @@ export function getAuthHttp(http: Http, options: RequestOptions) {
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    BusyModule,
     ToastModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
