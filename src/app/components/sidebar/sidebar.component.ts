@@ -1,5 +1,5 @@
 import { User } from './../../models/User';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UsersService } from './../../services/users.service';
 import { Router } from '@angular/router';
 
@@ -8,25 +8,15 @@ import { Router } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   currentUser: User.IMe;
 
   constructor(private usersService: UsersService, private router: Router) {
     // emit after login
     this.usersService.currentUserChanged
-      .flatMap(() => this.usersService.getMe())
       .subscribe((user: User.IMe) => {
         this.currentUser = user;
       });
-  }
-
-  ngOnInit() {
-    if (this.isLoggedIn()) {
-      this.usersService.getMe()
-        .subscribe((data: User.IMe) => {
-          this.currentUser = data;
-        });
-    }
   }
 
   /**
@@ -35,9 +25,10 @@ export class SidebarComponent implements OnInit {
    * @memberof SidebarComponent
    */
   logout(): void {
-    this.usersService.logout().subscribe(data => {
-      this.router.navigate(['/login']);
-    });
+    this.usersService.logout()
+      .subscribe(data => {
+        this.router.navigate(['/login']);
+      });
   }
 
   /**

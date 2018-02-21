@@ -1,14 +1,15 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
 import { API } from './../app.constant';
 import { JwtHelper } from 'angular2-jwt';
 import { User } from '../models/User';
-import { AuthHttp } from 'angular2-jwt';
+import { JwtHttp } from 'angular2-jwt-refresh';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,22 @@ export class UsersService {
   jwtHelper: JwtHelper = new JwtHelper();
   currentUser: User.IUser;
 
-  constructor(private http: HttpClient, private authHttp: AuthHttp) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private jwtHttp: JwtHttp
+  ) {
+    if (localStorage.getItem('token')) {
+      this.getMe().subscribe(
+        (user: User.IUser) => {
+          this.currentUser = user;
+
+          // emit to current user side bar
+          this.currentUserChanged.emit(user);
+        }
+      );
+    }
+  }
 
   /**
    * Login and set localStorage token
@@ -33,16 +49,17 @@ export class UsersService {
     };
     return this.http
       .post<User.ILogin>(environment.api + API.USERS.LOGIN, user, httpOptions)
-      .map(data => {
+      .map((data: any) => {
         if (data) {
-          this.currentUser = this.jwtHelper.decodeToken(data.jwt);
-
           // set token in localStorage
           localStorage.setItem('token', data.jwt);
           localStorage.setItem('refresh_token', data.refresh_token);
 
-          // emit to current user side bar
-          this.currentUserChanged.emit();
+          this.getMe().subscribe((response: User.IUser) => {
+            this.currentUser = response;
+            // emit to current user side bar
+            this.currentUserChanged.emit(response);
+          });
         }
       });
   }
@@ -58,7 +75,7 @@ export class UsersService {
       refresh_token: localStorage.refresh_token
     };
 
-    return this.authHttp
+    return this.jwtHttp
       .delete(environment.api + API.USERS.LOGIN, { body })
       .map(data => {
         this.removeTokens();
@@ -83,7 +100,7 @@ export class UsersService {
    * @memberof UsersService
    */
   getMe(): Observable<Object> {
-    return this.authHttp
+    return this.jwtHttp
       .get(environment.api + API.USERS.ME)
       .map(response => response.json());
   }
@@ -102,17 +119,24 @@ export class UsersService {
       return false;
     }
 
+    if (this.currentUser) {
+      return !!this.currentUser.email;
+    }
+
     try {
       isExpired = !this.jwtHelper.isTokenExpired(token);
-
       // if (isExpired) {
-      //   this.refreshToken()
-      //   .subscribe();
+      // this.refreshToken()
+      //   .subscribe(() => {
+      //     return true;
+      //   }, () => {
+      //     return false;
+      //   } );
       // }
     } catch (error) {
       isExpired = false;
-      this.removeTokens();
-      return isExpired;
+      // this.removeTokens();
+      // return isExpired;
     }
     return isExpired;
   }
@@ -143,6 +167,13 @@ export class UsersService {
       });
   }
 
+  /**
+   * Registration API
+   *
+   * @param {User.ISignUp} user
+   * @returns
+   * @memberof UsersService
+   */
   registration(user: User.ISignUp) {
     const httpOptions = {
       headers: new HttpHeaders({

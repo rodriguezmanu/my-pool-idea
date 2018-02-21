@@ -6,10 +6,12 @@ import 'rxjs/add/operator/expand';
 import { environment } from '../../environments/environment';
 import { API } from './../app.constant';
 import { Observable } from 'rxjs/rx';
+import { JwtHttp } from 'angular2-jwt-refresh';
+import 'rxjs/Rx';
 
 @Injectable()
 export class IdeasService {
-  constructor(private authHttp: AuthHttp) {}
+  constructor(private jwtHttp: JwtHttp) {}
 
   /**
    * Create new idea
@@ -19,7 +21,7 @@ export class IdeasService {
    * @memberof IdeasService
    */
   createNewIdea(body: Idea.Body): Observable<Object> {
-    return this.authHttp
+    return this.jwtHttp
       .post(environment.api + API.IDEAS.CREATE, body)
       .map(response => response.json());
   }
@@ -32,7 +34,7 @@ export class IdeasService {
    * @memberof IdeasService
    */
   getIdeas(page: number): Observable<Object> {
-    return this.authHttp
+    return this.jwtHttp
       .get(environment.api + API.IDEAS.GET + `?page=${page}`)
       .map(response => {
         return {
@@ -64,7 +66,7 @@ export class IdeasService {
    * @memberof IdeasService
    */
   deleteIdea(id: string): Observable<Object> {
-    return this.authHttp
+    return this.jwtHttp
       .delete(environment.api + API.IDEAS.DELETE + id)
       .map(response => response.json());
   }
@@ -78,7 +80,7 @@ export class IdeasService {
    * @memberof IdeasService
    */
   updateIdea(body: Idea.Get): Observable<Object> {
-    return this.authHttp
+    return this.jwtHttp
       .put(environment.api + API.IDEAS.UPDATE + body.id, { body })
       .map(response => response.json());
   }
