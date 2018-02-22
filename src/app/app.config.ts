@@ -25,7 +25,6 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
       }
 
       localStorage.setItem('token', res['jwt']);
-      localStorage.setItem('refresh_token', res['refresh_token']);
 
       return true;
     }

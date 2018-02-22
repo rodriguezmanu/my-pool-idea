@@ -40,6 +40,7 @@
     "UPDATED": "This Idea has been updated!",
     "DELETED": "This Idea has been deleted!",
     "ERRORMESSAGE": "Please try again!",
+    "UNAUTH": "You are not authorize",
     "BADLOGIN": "Email or password incorrect",
     "BADLOGOUT": "Something was wrong, login again" ,
     "SIGNUP": "The account has been created"

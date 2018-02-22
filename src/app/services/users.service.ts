@@ -1,6 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { API } from './../app.constant';
 import { JwtHelper } from 'angular2-jwt';
@@ -24,16 +23,14 @@ export class UsersService {
     private jwtHttp: JwtHttp
   ) {
     if (localStorage.getItem('token')) {
-      this.getMe().subscribe(
-        (user: User.IUser) => {
-          this.currentUser = user;
+      this.getMe().subscribe((user: User.IUser) => {
+        this.currentUser = user;
 
-          this.router.navigate(['/ideas']);
+        this.router.navigate(['/ideas']);
 
-          // emit to current user side bar
-          this.currentUserChanged.emit(user);
-        }
-      );
+        // emit to current user side bar
+        this.currentUserChanged.emit(user);
+      });
     }
   }
 
@@ -44,14 +41,9 @@ export class UsersService {
    * @memberof UsersService
    */
   login(user: User.IUser): Observable<void> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
     return this.http
-      .post<User.ILogin>(environment.api + API.USERS.LOGIN, user, httpOptions)
-      .map((data: any) => {
+      .post<User.ILogin>(environment.api + API.USERS.LOGIN, user)
+      .map((data: User.ILogin) => {
         if (data) {
           this.setTokens(data.jwt, data.refresh_token);
 
@@ -89,7 +81,7 @@ export class UsersService {
 
     return this.jwtHttp
       .delete(environment.api + API.USERS.LOGIN, { body })
-      .map(data => {
+      .map((data) => {
         this.removeTokens();
       });
   }
@@ -114,7 +106,10 @@ export class UsersService {
   getMe(): Observable<Object> {
     return this.jwtHttp
       .get(environment.api + API.USERS.ME)
-      .map(response => response.json());
+      .map((response) => response.json())
+      .catch((error: Response) => {
+        return this.getUnAuthErrorHandler(error);
+      });
   }
 
   /**
@@ -152,16 +147,24 @@ export class UsersService {
    * @memberof UsersService
    */
   registration(user: User.ISignUp) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-
     return this.http
-      .post<User.ILogin>(environment.api + API.USERS.SIGNUP, user, httpOptions)
+      .post<User.ILogin>(environment.api + API.USERS.SIGNUP, user)
       .map(data => {
         this.setTokens(data.jwt, data.refresh_token);
       });
+  }
+
+  /**
+   * Get handler error fror 401 unauthorize
+   *
+   * @param {Response} error
+   * @returns {Observable<Response>}
+   * @memberof IdeasService
+   */
+  getUnAuthErrorHandler(error: Response): Observable<Response> {
+    if (error.status === 401) {
+      this.router.navigate(['/login']);
+    }
+    return Observable.throw(error);
   }
 }

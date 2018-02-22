@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/rx';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

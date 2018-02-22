@@ -52,23 +52,20 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   getAllIdeas() {
-    this.busy = this.ideasService.getAllIdeas().subscribe(
-      response => {
+    this.busy = this.ideasService.getAllIdeas().subscribe((response) => {
         if (response.data) {
           this.temp.push.apply(this.temp, response.data);
         }
       },
-      () => {
-        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
-      },
-      () => {
+      (error: Response) => {
+        this.getErrorHandler(error);
+      }, () => {
         const data = this.setEditVisibility(this.temp);
         const sorted = _.sortBy(data, 'average_score');
 
         this.dataSource = new MatTableDataSource(sorted);
         this.temp = [];
-      }
-    );
+      });
   }
 
   /**
@@ -84,8 +81,8 @@ export class IdeasComponent implements OnInit {
 
         this.dataSource = new MatTableDataSource(data);
       },
-      () => {
-        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+      (error: Response) => {
+        this.getErrorHandler(error);
       }
     );
   }
@@ -113,17 +110,17 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   createNewIdea(idea: Idea.Get): void {
-    if (!idea.isEdit) {
+    if (idea.id) {
       this.updateIdea(idea);
     } else {
       this.ideasService.createNewIdea(idea)
         .subscribe(
-          data => {
+          (data: Response) => {
             this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
             this.getAllIdeas();
           },
-          () => {
-            this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+          (error: Response) => {
+            this.getErrorHandler(error);
           }
         );
     }
@@ -141,12 +138,12 @@ export class IdeasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
         this.ideasService.deleteIdea(id).subscribe(
-          data => {
+          (data: Response) => {
             this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.DELETED');
             this.clearIdea(id, {});
           },
-          () => {
-            this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+          (error: Response) => {
+            this.getErrorHandler(error);
           }
         );
       }
@@ -161,13 +158,12 @@ export class IdeasComponent implements OnInit {
    */
   updateIdea(idea: Idea.Get): void {
     this.ideasService.updateIdea(idea).subscribe(
-      data => {
+      (data: Response) => {
         this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.UPDATED');
-        // this.changeStatus(idea, false);
-        this.getIdeas();
+        this.getAllIdeas();
       },
-      () => {
-        this.toastsService.error('ALERTS.ERROR', 'ALERTS.ERRORMESSAGE');
+      (error: Response) => {
+        this.getErrorHandler(error);
       }
     );
   }
@@ -225,5 +221,16 @@ export class IdeasComponent implements OnInit {
         }
       }
     }
+  }
+
+  /**
+   * Get error handler depending on status code error
+   *
+   * @param {Response} error
+   * @memberof IdeasComponent
+   */
+  getErrorHandler(error: Response): void {
+    const message = (error.status === 401) ? 'ALERTS.UNAUTH' : 'ALERTS.ERRORMESSAGE'
+        this.toastsService.error('ALERTS.ERROR', message);
   }
 }

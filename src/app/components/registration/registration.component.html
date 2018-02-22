@@ -7,15 +7,15 @@
   <form [formGroup]="registrationForm" (ngSubmit)="register()" fxLayout="column">
     <!-- Name -->
     <mat-form-field>
-      <input matInput type="name" placeholder="Name" formControlName="name">
+      <input matInput type="name" placeholder="Name" formControlName="name" autocomplete="name">
     </mat-form-field>
     <!-- Email -->
     <mat-form-field>
-      <input matInput type="email" placeholder="Email" formControlName="email">
+      <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="email">
     </mat-form-field>
     <!-- Password -->
     <mat-form-field>
-      <input matInput type="password" placeholder="Password" formControlName="password">
+      <input matInput type="password" placeholder="Password" autocomplete="password" formControlName="password">
     </mat-form-field>
 
     <!-- Actions -->
