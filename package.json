@@ -4,12 +4,11 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "http-server dist/",
+    "start": "node server.js",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "preinstall": "npm install -g http-server",
     "postinstall": "ng build --prod -aot=false"
   },
   "private": true,
@@ -32,7 +31,9 @@
     "angular2-busy": "^2.0.4",
     "angular2-jwt": "^0.2.3",
     "angular2-jwt-refresh": "^0.1.0",
+    "body-parser": "^1.18.2",
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
     "lodash": "^4.17.5",
     "ng2-toastr": "^4.1.2",
     "rxjs": "^5.5.6",
