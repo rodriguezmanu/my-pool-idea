@@ -10,7 +10,7 @@ import { EMAIL_VALIDATOR_REGEX, PASSWORD_VALIDATION_REGEX } from './../../app.co
 import { UsersService } from './../../services/users.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/takeUntil';
-import { Subject } from 'rxjs/rx';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-login',

@@ -13,7 +13,7 @@ import { ToastsService } from '../../services/toastr.service';
 import { Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
 import 'rxjs/add/operator/takeUntil';
-import { Subject } from 'rxjs/rx';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-registration',
