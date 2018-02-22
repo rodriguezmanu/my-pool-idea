@@ -30,7 +30,7 @@ export class SidebarComponent {
    */
   logout(): void {
     this.usersService.logout().subscribe(
-      data => {
+      () => {
         this.router.navigate(['/login']);
       },
       () => {

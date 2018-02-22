@@ -10,7 +10,7 @@ export class ToastsService {
   private toastOpts: ToastOptions,
   private translate: TranslateService
   ) {
-  this.toastOpts.positionClass = 'toast-top-center';
+    this.toastOpts.positionClass = 'toast-top-center';
   }
 
   /**

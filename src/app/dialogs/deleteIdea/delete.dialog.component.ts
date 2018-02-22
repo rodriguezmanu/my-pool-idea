@@ -8,14 +8,22 @@ import { Component, Inject } from '@angular/core';
   styleUrls: ['./delete.dialog.component.scss']
 })
 export class DeleteDialogComponent {
-  constructor(
-    private dialogRef: MatDialogRef<DeleteDialogComponent>,
-  ) {}
+  constructor(private dialogRef: MatDialogRef<DeleteDialogComponent>) {}
 
+  /**
+   * Cancel Modal
+   *
+   * @memberof DeleteDialogComponent
+   */
   onNoClick(): void {
     this.dialogRef.close('cancel');
   }
 
+  /**
+   * Confirm Modal
+   *
+   * @memberof DeleteDialogComponent
+   */
   confirmDelete(): void {
     this.dialogRef.close('confirm');
   }

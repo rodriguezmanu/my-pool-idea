@@ -1,5 +1,5 @@
 import { ToastsService } from './../../services/toastr.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -17,7 +17,7 @@ import { Subject } from 'rxjs/Subject';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -45,8 +45,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {}
-
   /**
    * Login from service
    *
@@ -62,14 +60,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(user)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        data => {
+        () => {
           this.router.navigate(['/ideas']);
-        },() => {
+        },
+        () => {
           this.toastsService.error('ALERTS.ERROR', 'ALERTS.BADLOGIN');
         }
       );
   }
 
+  /**
+   * Destroy method
+   *
+   * @memberof LoginComponent
+   */
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

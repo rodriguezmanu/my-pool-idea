@@ -8,8 +8,7 @@ import {
 } from '@angular/material';
 import { DeleteDialogComponent } from '../../dialogs/deleteIdea/delete.dialog.component';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-ideas',
@@ -19,7 +18,7 @@ import { Subscription } from 'rxjs';
 export class IdeasComponent implements OnInit {
   numbers: number[];
   ideas: Idea.Get[] = [];
-  newIdeaView = false;
+  hoveredIndex: boolean;
   dataSource;
   temp = [];
   busy: Subscription;
@@ -52,20 +51,23 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   getAllIdeas() {
-    this.busy = this.ideasService.getAllIdeas().subscribe((response) => {
+    this.busy = this.ideasService.getAllIdeas().subscribe(
+      (response) => {
         if (response.data) {
           this.temp.push.apply(this.temp, response.data);
         }
       },
       (error: Response) => {
         this.getErrorHandler(error);
-      }, () => {
+      },
+      () => {
         const data = this.setEditVisibility(this.temp);
         const sorted = _.sortBy(data, 'average_score');
 
         this.dataSource = new MatTableDataSource(sorted);
         this.temp = [];
-      });
+      }
+    );
   }
 
   /**
@@ -113,16 +115,15 @@ export class IdeasComponent implements OnInit {
     if (idea.id) {
       this.updateIdea(idea);
     } else {
-      this.ideasService.createNewIdea(idea)
-        .subscribe(
-          (data: Response) => {
-            this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
-            this.getAllIdeas();
-          },
-          (error: Response) => {
-            this.getErrorHandler(error);
-          }
-        );
+      this.ideasService.createNewIdea(idea).subscribe(
+        (data: Response) => {
+          this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
+          this.getAllIdeas();
+        },
+        (error: Response) => {
+          this.getErrorHandler(error);
+        }
+      );
     }
   }
 
@@ -230,7 +231,9 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   getErrorHandler(error: Response): void {
-    const message = (error.status === 401) ? 'ALERTS.UNAUTH' : 'ALERTS.ERRORMESSAGE'
-        this.toastsService.error('ALERTS.ERROR', message);
+    const message =
+      error.status === 401 ? 'ALERTS.UNAUTH' : 'ALERTS.ERRORMESSAGE';
+
+    this.toastsService.error('ALERTS.ERROR', message);
   }
 }

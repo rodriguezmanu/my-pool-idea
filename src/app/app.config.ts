@@ -1,10 +1,10 @@
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { HttpClient } from "@angular/common/http";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
 import { Http, RequestOptions, HttpModule } from '@angular/http';
 import { environment } from '../environments/environment';
 import { API } from './app.constant';
-import { AuthConfig } from "angular2-jwt";
-import { JwtHttp, JwtConfigService } from "angular2-jwt-refresh";
+import { AuthConfig } from 'angular2-jwt';
+import { JwtHttp, JwtConfigService } from 'angular2-jwt-refresh';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

@@ -30,10 +30,10 @@
       <mat-table #table [dataSource]="dataSource">
         <!-- Content Column -->
         <ng-container matColumnDef="content">
-          <mat-header-cell *matHeaderCellDef>
+          <mat-header-cell *matHeaderCellDef fxFlex="60%">
           </mat-header-cell>
             <!-- Edit/New mode -->
-          <mat-cell *matCellDef="let element;let i=index;">
+          <mat-cell class="element-content" fxFlex="60%" *matCellDef="let element;let i=index;">
             <mat-form-field *ngIf="element.isEdit">
               <input matInput type="text" [(ngModel)]="element.content">
             </mat-form-field>
@@ -152,7 +152,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (mouseover)="hoveredIndex=row.id"></mat-row>
+        <mat-row class="bullet" *matRowDef="let row; columns: displayedColumns;" (mouseover)="hoveredIndex=row.id"></mat-row>
       </mat-table>
     </div>
   </div>

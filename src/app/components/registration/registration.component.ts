@@ -80,6 +80,11 @@ export class RegistrationComponent {
       );
   }
 
+  /**
+   * Destroy method
+   *
+   * @memberof RegistrationComponent
+   */
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

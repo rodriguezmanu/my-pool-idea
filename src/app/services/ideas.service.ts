@@ -55,10 +55,10 @@ export class IdeasService {
   /**
    * Get All Ideas recursive
    *
-   * @returns {Observable<Object>}
+   * @returns {Observable<any>}
    * @memberof IdeasService
    */
-  getAllIdeas() {
+  getAllIdeas(): Observable<any> {
     return this.getIdeas(1).expand((res: any) => {
       return res.data && res.data.length === 10
         ? this.getIdeas(res.page + 1)
