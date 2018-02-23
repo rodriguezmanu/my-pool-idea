@@ -52,7 +52,7 @@ export class IdeasComponent implements OnInit {
    */
   getAllIdeas() {
     this.busy = this.ideasService.getAllIdeas().subscribe(
-      (response) => {
+      response => {
         if (response.data) {
           this.temp.push.apply(this.temp, response.data);
         }
@@ -115,15 +115,14 @@ export class IdeasComponent implements OnInit {
     if (idea.id) {
       this.updateIdea(idea);
     } else {
-      this.ideasService.createNewIdea(idea).subscribe(
-        (data: Response) => {
-          this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
-          this.getAllIdeas();
-        },
-        (error: Response) => {
-          this.getErrorHandler(error);
-        }
-      );
+      this.busy = this.ideasService
+        .createNewIdea(idea)
+        .subscribe((data: Response) => {
+            this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.CREATED');
+            this.getAllIdeas();
+          }, (error: Response) => {
+            this.getErrorHandler(error);
+          });
     }
   }
 
@@ -158,15 +157,14 @@ export class IdeasComponent implements OnInit {
    * @memberof IdeasComponent
    */
   updateIdea(idea: Idea.Get): void {
-    this.ideasService.updateIdea(idea).subscribe(
-      (data: Response) => {
-        this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.UPDATED');
-        this.getAllIdeas();
-      },
-      (error: Response) => {
-        this.getErrorHandler(error);
-      }
-    );
+    this.busy = this.ideasService
+      .updateIdea(idea)
+      .subscribe((data: Response) => {
+          this.toastsService.success('ALERTS.SUCCESS', 'ALERTS.UPDATED');
+          this.getAllIdeas();
+        }, (error: Response) => {
+          this.getErrorHandler(error);
+        });
   }
 
   /**

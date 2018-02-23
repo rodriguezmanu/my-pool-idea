@@ -1,4 +1,6 @@
-<div class="ideas-container" [ngBusy]="{busy: busy, minDuration: 1000}">
+<div class="ideas-container">
+  <div class="title" [cgBusy]="busy" [cgBusyConfig]="{minDuration: 1000}"></div>
+  <!-- Loading spinner -->
   <!-- Header -->
   <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
     <!-- Title -->
@@ -105,7 +107,7 @@
 
         <!-- Avg Column -->
         <ng-container matColumnDef="avg">
-          <mat-header-cell *matHeaderCellDef>
+          <mat-header-cell class="avg-header" *matHeaderCellDef>
             {{ 'IDEAS.TABLE.AVG' | translate}}
           </mat-header-cell>
           <mat-cell *matCellDef="let element;let i=index;">

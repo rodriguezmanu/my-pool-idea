@@ -1,7 +1,6 @@
 import { Component, ViewContainerRef } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
-
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
@@ -15,8 +14,10 @@ export class AppComponent {
     private toastr: ToastsManager,
     vcr: ViewContainerRef
   ) {
+    // config translate module
     translate.setDefaultLang('en');
 
+    // config toasts notification module
     this.toastr.setRootViewContainerRef(vcr);
   }
 }

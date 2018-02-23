@@ -20,7 +20,7 @@ export class ToastsService {
    * @param {string} title
    * @memberof ToastsService
    */
-  success(message: string, title: string) {
+  success(message: string, title: string): void {
     this.translate.get([message, title]).subscribe((res) => {
       this.toastr.success(res[title], res[message]);
     });
@@ -33,7 +33,7 @@ export class ToastsService {
    * @param {string} title
    * @memberof ToastsService
    */
-  error(message: string, title: string) {
+  error(message: string, title: string): void {
     this.translate.get([message, title]).subscribe(res => {
       this.toastr.error(res[title], res[message]);
     });

@@ -81,7 +81,7 @@ export class UsersService {
 
     return this.jwtHttp
       .delete(environment.api + API.USERS.LOGIN, { body })
-      .map((data) => {
+      .map(data => {
         this.removeTokens();
       });
   }
@@ -106,7 +106,7 @@ export class UsersService {
   getMe(): Observable<Object> {
     return this.jwtHttp
       .get(environment.api + API.USERS.ME)
-      .map((response) => response.json())
+      .map(response => response.json())
       .catch((error: Response) => {
         return this.getUnAuthErrorHandler(error);
       });
@@ -143,10 +143,10 @@ export class UsersService {
    * Registration API
    *
    * @param {User.ISignUp} user
-   * @returns
+   * @returns {Observable<void>}
    * @memberof UsersService
    */
-  registration(user: User.ISignUp) {
+  registration(user: User.ISignUp): Observable<void> {
     return this.http
       .post<User.ILogin>(environment.api + API.USERS.SIGNUP, user)
       .map(data => {

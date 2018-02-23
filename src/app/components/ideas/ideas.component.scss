@@ -37,20 +37,19 @@
       color: $blue;
     }
 
-    .mat-select {
-      width: 50px;
-      height: 20px;
-      border: 1px solid $grey-light;
-      padding: 10px;
-      background-image: linear-gradient(-180deg, #F2F2F2 0%, #D4D4D4 100%);
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.20),
-      inset 0 2px 0 0 #FFFFFF;
-      border-radius: 3px;
-    }
-
     .new-idea-container {
       .done {
         color: $green;
+      }
+
+      .mat-select {
+        width: 50px;
+        height: 20px;
+        border: 1px solid $grey-light;
+        padding: 10px;
+        background-image: linear-gradient(-180deg, #F2F2F2 0%, #D4D4D4 100%);
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.20), inset 0 2px 0 0 #FFFFFF;
+        border-radius: 3px;
       }
 
       .mat-icon-button[disabled][disabled] mat-icon {
@@ -87,6 +86,10 @@
       .mat-header-cell {
         font-size: 14px;
         color: $blue;
+
+        &.avg-header {
+          font-weight: bold;
+        }
       }
 
       .mat-table {
@@ -102,6 +105,7 @@
           font-size: 16px;
         }
       }
+
       .mat-form-field {
         width: 95%;
       }

@@ -20,7 +20,7 @@ import { Subject } from 'rxjs/Subject';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnDestroy {
   registrationForm: FormGroup;
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
 

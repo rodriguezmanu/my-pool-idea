@@ -7,14 +7,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from './modules/app-material/app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-
 import { HttpClientModule, HttpClient} from '@angular/common/http';
 import { Http, RequestOptions, HttpModule } from '@angular/http';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-import { BusyModule } from 'angular2-busy';
+import { CgBusyModule } from 'angular-busy2';
 import { AppRoutingModule } from './app.routing';
 import { JwtConfigService, JwtHttp } from 'angular2-jwt-refresh';
-
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
@@ -43,7 +41,7 @@ import { HttpLoaderFactory, getJwtHttp } from './app.config';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    BusyModule,
+    CgBusyModule,
     ToastModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
