@@ -8,4 +8,4 @@
 
 ## URL
 
-[https://my-idea-pool-app.herokuapp.com/] (https://my-idea-pool-app.herokuapp.com/)
+[https://my-idea-pool-app.herokuapp.com/](https://my-idea-pool-app.herokuapp.com/)
